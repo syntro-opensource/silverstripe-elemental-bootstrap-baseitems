@@ -31,8 +31,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Syntro\\BootstrapAlertsection\\": "src/",
-            "Syntro\\BootstrapAlertsection\\Tests\\": "tests/"
+            "Syntro\\SilverStripeElementalBaseitems\\": "src/",
+            "Syntro\\SilverStripeElementalBaseitems\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "dev",
