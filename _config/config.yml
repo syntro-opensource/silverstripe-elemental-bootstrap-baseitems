@@ -1,0 +1,6 @@
+---
+name: bootstrap-elemental-baseconfig
+---
+SilverStripe\Core\Injector\Injector:
+  DNADesign\Elemental\Extensions\ElementalPageExtension:
+    class: Syntro\SilverStripeElementalBaseitems\Extensions\BootstrapElementalPageExtension
