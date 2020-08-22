@@ -7,15 +7,12 @@
 
 
 This module provides DataObjects for sections in the
-[`syntro/silverstripe-elemental-bootstrap-collection`](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-collection).
+[`syntro/silverstripe-elemental-bootstrap-collection`](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-collection) module.
 
+It sets up a new base element, which is capable of handling color management
+for bootstrap blocks, establishes a templating namespace and uses a different
+controller template, suitable for full-width bootstrap based themes.
 
-## Requirements
-
-* SilverStripe ^4.0
-* Silverstripe elemental ^4
-* buckleshusky/fontawesomeiconpicker ^1
-* gorriecoe/silverstripe-link ^1
 
 ## Installation
 
