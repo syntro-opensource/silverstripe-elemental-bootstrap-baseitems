@@ -13,6 +13,14 @@ use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
  */
 class BootstrapContentSectionElement extends BootstrapSectionBaseElement
 {
+    /**
+     * This defines the block name in the CSS
+     *
+     * @config
+     * @var string
+     */
+    private static $block_name = 'content-section';
+
     private static $icon = 'font-icon-block-content';
 
     private static $db = [

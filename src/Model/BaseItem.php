@@ -11,9 +11,13 @@ use gorriecoe\Link\Models\Link;
 use gorriecoe\LinkField\LinkField;
 use BucklesHusky\FontAwesomeIconPicker\Forms\FAPickerField;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
+use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
 
 
 /**
+ * Base Item handling permissions related to the elements and streamlining
+ * templating
+ *
  * @author Matthias Leutenegger <hello@syntro.ch>
  */
 class BaseItem extends DataObject
@@ -24,26 +28,14 @@ class BaseItem extends DataObject
      */
     private static $db = [
         'Title' => 'Varchar',
-        'ShowIcon' => 'Boolean',
-        'FAIcon' => 'Varchar(20)',
-        'ShowTitle' => 'Varchar',
-        'Content' => 'HTMLText'
-    ];
-
-    /**
-     * @var array
-     */
-    private static $has_one = [
-        'Link' => Link::class,
-        'Image' => Image::class
+        'ShowTitle' => 'Varchar'
     ];
 
     /**
      * @var array
      */
     private static $searchable_fields = array(
-        'Title',
-        'Content',
+        'Title'
     );
 
     /**
@@ -63,7 +55,7 @@ class BaseItem extends DataObject
     /**
      * @var string
      */
-    private static $table_name = 'BaseElementItem';
+    private static $table_name = 'ElementalBootstrapBaseItem';
 
     /**
      * @return FieldList
@@ -84,23 +76,6 @@ class BaseItem extends DataObject
                     ->setName($this->fieldLabel('Title'))
             );
 
-            // Use Link fields to render Link
-            $fields->replaceField(
-                'LinkID',
-                $link = LinkField::create(
-                    'Link',
-                    'Link',
-                    $this
-                )
-            );
-            $link->setDescription('Add a call to action.');
-
-            // use FAPickerField for Icon
-            $fields->replaceField(
-                'FAIcon',
-                $faPicker = FAPickerField::create('FAIcon', 'Icon')
-            );
-            $faPicker->hideUnless("ShowIcon")->isChecked();
         });
         return parent::getCMSFields();
     }
@@ -199,5 +174,46 @@ class BaseItem extends DataObject
 
         return Permission::check('CMS_ACCESS', 'any', $member);
     }
+    //
+    // /**
+    //  * forTemplate - render this Object with a Template
+    //  *
+    //  * @return string|null
+    //  */
+    // public function forTemplate()
+    // {
+    //     $templates = $this->getRenderTemplates();
+    //
+    //     if ($templates) {
+    //         return $this->renderWith($templates);
+    //     }
+    //
+    //     return null;
+    // }
+    //
+    // /**
+    //  * getRenderTemplates - retrieve the templates for this element using
+    //  * the linked section
+    //  *
+    //  * @return array
+    //  */
+    // public function getRenderTemplates()
+    // {
+    //     $templates = [];
+    //     $ItemName = explode('\\', static::class);
+    //     $ItemName = array_pop($ItemName);
+    //     $relations = static::config()->get('has_one');
+    //     foreach ($relations as $key => $relation) {
+    //         if (is_subclass_of($relation, BootstrapSectionBaseElement::class)) {
+    //             $section = self::relObject($key);
+    //             $templateName = $ItemName;
+    //             if ($style = $section->Style) {
+    //                 $templates[] = $section->getSubTemplate($templateName."_$style");
+    //             }
+    //             $templates[] = $section->getSubTemplate($templateName);
+    //         }
+    //     }
+    //     return $templates;
+    // }
 
 }

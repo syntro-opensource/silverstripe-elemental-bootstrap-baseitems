@@ -19,6 +19,14 @@ class BootstrapSectionBaseElement extends BaseElement
 {
 
     /**
+     * This defines the block name in the CSS
+     *
+     * @config
+     * @var string
+     */
+    private static $block_name = 'section';
+
+    /**
      * @var string
      */
     private static $controller_class = BootstrapElementController::class;
@@ -373,6 +381,17 @@ class BootstrapSectionBaseElement extends BaseElement
         $ElementName = explode('\\', static::class);
         $ElementName = array_pop($ElementName);
         return $templateRoot . 'Blocks\\' . $ElementName . '\\' . $itemName;
+    }
+
+
+    /**
+     * getElementName - retrieve the block-name
+     *
+     * @return string
+     */
+    public function getElementName()
+    {
+        return static::config()->get('block_name');
     }
 
 }
