@@ -178,15 +178,18 @@ class BootstrapSectionBaseElement extends BaseElement
 
             // add a dropdown with available colors
             $fields->removeByName('BackgroundColor');
-            $fields->addFieldToTab(
-                'Root.Settings',
-                DropdownField::create(
-                    'BackgroundColor',
-                    'Background Color',
-                    $this->getBackgroundColors()
-                ),
-                'ExtraClass'
-            );
+            if (count($this->getBackgroundColors())) {
+                $fields->addFieldToTab(
+                    'Root.Settings',
+                    DropdownField::create(
+                        'BackgroundColor',
+                        'Background Color',
+                        $this->getBackgroundColors()
+                    ),
+                    'ExtraClass'
+                );
+            }
+
 
             // Add additional fields for setting an Image Background
             $useImage = static::config()->get('allow_image_background');
