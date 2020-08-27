@@ -1,1 +1,9 @@
 de:
+  Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement:
+    BACKGROUNDTYPE: Hintergrund Typ
+    COLOR: Farbe
+    IMAGE: Bild
+    BACKGROUNDCOLOR: Hintergrundfarbe
+    BACKGROUNDIMAGE: Hintergrundbild
+    TEXTCOLOR: Textfarbe
+    DEFAULT: Standard

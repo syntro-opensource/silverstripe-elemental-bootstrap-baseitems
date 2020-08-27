@@ -37,9 +37,9 @@ class BootstrapContentSectionElement extends BootstrapSectionBaseElement
 
 
     private static $background_colors = [
-        'light' => 'Lightgrey',
-        'dark' => 'Dark',
-        'default' => 'Default'
+        // 'light' => 'Lightgrey',
+        // 'dark' => 'Dark',
+        // 'default' => 'Default'
     ];
 
     private static $text_colors_by_background = [

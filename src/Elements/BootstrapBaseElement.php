@@ -2,6 +2,9 @@
 
 namespace Syntro\SilverStripeElementalBaseitems\Elements;
 
+use SilverStripe\Forms\ReadonlyField;
+use SilverStripe\Forms\OptionsetField;
+use SilverStripe\Forms\TextField;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Assets\Image;
@@ -69,6 +72,15 @@ class BootstrapSectionBaseElement extends BaseElement
     private static $description = 'Bootstrap Section Base element class';
 
     /**
+     * The default background color. If set, there will always be a class
+     * rendered
+     *
+     * @config
+     * @var string|null
+     */
+    private static $default_background_color = null;
+
+    /**
      * Available background colors for this Element
      *
      * @config
@@ -85,6 +97,14 @@ class BootstrapSectionBaseElement extends BaseElement
     private static $allow_image_background = true;
 
     /**
+     * The default text color. If set, there will always be a class rendered
+     *
+     * @config
+     * @var string|null
+     */
+    private static $default_text_color = null;
+
+    /**
      * Available text colors for this Element. They are not used unless
      * an image is applied as a section Background, where it becomes important
      * to let the user choose the text color (as it depends on the Image).
@@ -92,7 +112,9 @@ class BootstrapSectionBaseElement extends BaseElement
      * @config
      * @var array
      */
-    private static $text_colors = [];
+    private static $text_colors = [
+        'white'
+    ];
 
     /**
      * Color mapping from background color. This is mainly intended
@@ -105,23 +127,34 @@ class BootstrapSectionBaseElement extends BaseElement
     private static $text_colors_by_background = [];
 
     /**
-     * Available additional templates for this element. If populated, templates
-     * can be selected when creating the Element
+     * Color mapping from text color to link color. This array can be used to
+     * specify colors of buttons or links depending on the chosen background
+     * color. if no value is specified, this will fall back to the text color
      *
      * @config
      * @var array
      */
-    // private static $available_templates = [
-    //     'default' => 'Default Look'
-    // ];
+    private static $link_colors_by_text = [];
+
+    /**
+     * Color mapping from background to link color. This option can be used for
+     * special cases where the same text color should have different link colors
+     * (i.e. two dark background colors)
+     *
+     * @config
+     * @var array
+     */
+    private static $link_colors_by_background = [];
+
 
 
     /**
      * @var array
      */
     private static $db = [
-        'BackgroundColor' => 'Varchar(50)',
-        'TextColor' => 'Varchar(50)',
+        'BackgroundColorLabel' => 'Varchar(50)',
+        'BackgroundType' => 'Enum("image,color","image")',
+        'TextColorLabel' => 'Varchar(50)'
         // 'Template' => 'Varchar(255)'
     ];
 
@@ -129,9 +162,9 @@ class BootstrapSectionBaseElement extends BaseElement
      * @var array
      */
     private static $defaults = [
-        'BackgroundColor' => 'white',
-        'TextColor' => 'default',
-        // 'Template' => 'default'
+        'BackgroundColorLabel' => 'default',
+        'TextColorLabel' => 'default',
+        'BackgroundType' => 'color'
     ];
 
     /**
@@ -162,67 +195,79 @@ class BootstrapSectionBaseElement extends BaseElement
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
-            // add a dropdown with available templates
-            // $fields->removeByName('Template');
-            // $availableTemplates = $this->getAvailableTemplates();
-            // if (count($availableTemplates) > 1) {
-            //     $fields->addFieldToTab(
-            //         'Root.Settings',
-            //         DropdownField::create(
-            //             'Template',
-            //             'Template',
-            //             $availableTemplates
-            //         )
-            //     );
-            // }
 
-            // add a dropdown with available colors
-            $fields->removeByName('BackgroundColor');
-            if (count($this->getBackgroundColors())) {
+            $useImage = static::config()->get('allow_image_background');
+
+            // add a selection field for Color or image
+            $fields->removeByName('BackgroundType');
+            if ($useImage || count($this->getTranslatedOptionsFor('background_colors')) > 1) {
                 $fields->addFieldToTab(
                     'Root.Settings',
-                    DropdownField::create(
-                        'BackgroundColor',
-                        'Background Color',
-                        $this->getBackgroundColors()
+                    OptionsetField::create(
+                        'BackgroundType',
+                        _t(
+                            __CLASS__ . '.BACKGROUNDTYPE',
+                            'Background Type'
+                        ),
+                        $this->getBackgroundOptions()
                     ),
                     'ExtraClass'
                 );
             }
 
 
+            // add a dropdown with available colors
+            $fields->removeByName('BackgroundColorLabel');
+            $fields->addFieldToTab(
+                'Root.Settings',
+                $bgColorField = $this->createColorSelectField(
+                    'BackgroundColorLabel',
+                    _t(
+                        __CLASS__ . '.BACKGROUNDCOLOR',
+                        'Background color'
+                    ),
+                    'background_colors'
+                ),
+                'ExtraClass'
+            );
+            $bgColorField->hideIf('BackgroundType')->isEqualTo('image');
+
+
             // Add additional fields for setting an Image Background
-            $useImage = static::config()->get('allow_image_background');
             $fields->removeByName([
-                'TextColor',
+                'TextColorLabel',
                 'BGImage'
             ]);
             if ($useImage) {
-                // add an color field for Background
-
-                $fields->addFieldToTab(
-                    'Root.Settings',
-                    $textColor = DropdownField::create(
-                        'TextColor',
-                        'Text Color',
-                        $this->getTextColors()
-                    ),
-                    'ExtraClass'
-                );
-                $textColor->hideUnless('BackgroundColor')->isEqualTo('_image');
-
                 // add an image field for Background
                 $fields->addFieldToTab(
                     'Root.Settings',
                     $backgroundImage = UploadField::create(
                         'BGImage',
-                        'Background Image'
+                        _t(
+                            __CLASS__ . '.BACKGROUNDIMAGE',
+                            'Background Image'
+                        )
                     )
                         ->setFolderName('Uploads/Elements/Backgrounds')
                         ->setIsMultiUpload(false),
                     'ExtraClass'
                 );
-                $backgroundImage->hideUnless('BackgroundColor')->isEqualTo('_image');
+                $backgroundImage->hideUnless('BackgroundType')->isEqualTo('image');
+
+                $fields->addFieldToTab(
+                    'Root.Settings',
+                    $textColor = $this->createColorSelectField(
+                        'TextColorLabel',
+                        _t(
+                            __CLASS__ . '.TEXTCOLOR',
+                            'Text color'
+                        ),
+                        'text_colors'
+                    ),
+                    'ExtraClass'
+                );
+                $textColor->hideUnless('BackgroundType')->isEqualTo('image');
             }
         });
 
@@ -231,130 +276,268 @@ class BootstrapSectionBaseElement extends BaseElement
         return parent::getCMSFields();
     }
 
+
     /**
-     * getBackgroundColors
+     * getBackgroundOptions - return possible options for background
      *
      * @return array
      */
-    public function getBackgroundColors()
+    public function getBackgroundOptions()
     {
-        $colors = static::config()->get('background_colors');
         $useImage = static::config()->get('allow_image_background');
-        $selection = [];
-        foreach ($colors as $colorKey => $colorName) {
-            $selection[$colorKey] = _t(
-                __CLASS__ . '.' . $colorKey,
-                $colorName
-            );
-        }
-
+        $options = [
+            'color' => _t(
+                __CLASS__ . '.COLOR',
+                'Color'
+            )
+        ];
         if ($useImage) {
-            $selection['_image'] = _t(
-                __CLASS__ . '._image',
-                'Image background'
+            $options['image'] = _t(
+                __CLASS__ . '.IMAGE',
+                'Image'
             );
         }
-        return $selection;
+        return $options;
+
     }
 
     /**
-     * getTextColors
+     * getTranslatedOptionsFor - retrieve a config value prepped for a dropdown
      *
+     * @param  string $value the name of the config value
      * @return array
      */
-    public function getTextColors()
+    public function getTranslatedOptionsFor($configOption)
     {
-        $colors = static::config()->get('text_colors');
+        $values = static::config()->get($configOption);
         $selection = [];
-        foreach ($colors as $colorKey => $colorName) {
-            $selection[$colorKey] = _t(
-                __CLASS__ . '.' . $colorKey,
-                $colorName
+        foreach ($values as $valueKey => $valueName) {
+            $selection[$valueKey] = _t(
+                __CLASS__ . '.' . $valueKey,
+                $valueName
             );
         }
+        $selection['default'] = _t(
+            __CLASS__ . '.DEFAULT',
+            'Default'
+        );
         return $selection;
     }
 
-    // /**
-    //  * getAvailableTemplates
-    //  *
-    //  * @return array
-    //  */
-    // public function getAvailableTemplates()
-    // {
-    //     $templates = static::config()->get('available_templates');
-    //     foreach ($templates as $templateKey => $templateName) {
-    //         $selection[$templateKey] = _t(
-    //             __CLASS__ . '.' . $templateKey,
-    //             $templateName
-    //         );
-    //     }
-    //     return $selection;
-    // }
+    /**
+     * createColorSelectField - generates a field to be displayed in the cms
+     * allowing the selection of values from a color list
+     *
+     * @param  string $name                the name of the field
+     * @param  string $title               the title of the field
+     * @param  string $colorListFromConfig the config option containing the list
+     * @return DropdownField|TextField
+     */
+    public function createColorSelectField($name,$title,$colorListFromConfig)
+    {
+        $options = $this->getTranslatedOptionsFor($colorListFromConfig);
+        if (count($options) > 1) {
+            $bgColorField = DropdownField::create(
+                $name,
+                $title,
+                $options
+            );
+        } else {
+            $bgColorField = TextField::create(
+                sprintf("%s_RO", $name),
+                $title
+            );
+            $bgColorField->setValue(_t(
+                __CLASS__ . '.DEFAULT',
+                'Default'
+            ))->setReadOnly(true);
+        }
+        return $bgColorField;
+    }
+
 
     /**
-     * getBackgroundColor - returns the background Color
+     * getBackgroundColor - retrun the background color label for this section
      *
      * @return string|null
      */
-    public function getComputedBackgroundColor()
+    public function getBackgroundColor()
     {
-        $availableColors = static::config()->get('background_colors');
-        if (
-            $this->BackgroundColor &&
-            isset($availableColors[$this->BackgroundColor]) &&
-            $this->BackgroundColor !== '_image' &&
-            $this->BackgroundColor !== 'default'
-        ) {
-            return $this->BackgroundColor;
+        $default = static::config()->get('default_background_color');
+        $default = $default ? $default : null;
+        $bgColors = static::config()->get('background_colors');
+        if ($this->BackgroundType == 'image' && static::config()->get('allow_image_background')) {
+            return null;
+        } elseif ($this->BackgroundColorLabel == 'default') {
+            return $default;
         }
-        return null;
+        return isset($bgColors[$this->BackgroundColorLabel]) ? $this->BackgroundColorLabel : $default;
     }
 
     /**
-     * getTextColor - returns the current text color
+     * getTextColor - return the text color label for this section
      *
      * @return string|null
      */
-    public function getComputedTextColor()
+    public function getTextColor()
     {
-        $availableColors = static::config()->get('text_colors');
-        $bgToTextColor = static::config()->get('text_colors_by_background');
-        if (
-            $this->TextColor &&
-            isset($availableColors[$this->TextColor]) &&
-            $this->BackgroundColor === '_image'
-        ) {
-            return $this->TextColor;
-        } elseif (
-            $this->BackgroundColor &&
-            $this->BackgroundColor !== 'default' &&
-            $this->BackgroundColor !== '_image' &&
-            isset($bgToTextColor[$this->BackgroundColor])
-        ) {
-            return $bgToTextColor[$this->BackgroundColor];
+        $default = static::config()->get('default_text_color');
+        $default = $default ? $default : null;
+        $textColors = static::config()->get('text_colors');
+        if ($this->BackgroundType == 'image' && static::config()->get('allow_image_background')) {
+            return isset($textColors[$this->TextColorLabel]) ? $this->TextColorLabel : $default;;
         }
-        return null;
+
+        $colorsByBackground = static::config()->get('text_colors_by_background');
+
+        return isset($colorsByBackground[$this->BackgroundColorLabel]) ? $colorsByBackground[$this->BackgroundColorLabel] : $default;
     }
 
     /**
-     * getBackgroundImage - returns the durrent background image
+     * getBackgroundColorClass - retrun the background color class for this section
+     *
+     * @return string
+     */
+    public function getBackgroundColorClass()
+    {
+        $bgColor = $this->getBackgroundColor();
+        if ($bgColor) {
+            return sprintf('bg-%s',$bgColor);
+        }
+        return '';
+    }
+
+    /**
+     * getTextColorClass - retrun the text color class for this section
+     *
+     * @return string
+     */
+    public function getTextColorClass()
+    {
+        $textColor = $this->getTextColor();
+        if ($textColor) {
+            return sprintf('text-%s',$textColor);
+        }
+        return '';
+    }
+
+    /**
+     * getTextColor - retrieve the link color class. Uses $link_colors_by_text
+     * and $link_colors_by_background.
+     *
+     * The order is as follows:
+     * 1. check if a link color by background is defined
+     * 2. check if a link color by text color is defined
+     * 3. return text color
+     *
+     * @return string
+     */
+    public function getLinkColor()
+    {
+        $linkColorByBackground = static::config()->get('link_colors_by_background');
+        if (isset($linkColorByBackground[$this->getBackgroundColor()])) {
+            return $linkColorByBackground[$this->getBackgroundColor()];
+        }
+        $textColor = $this->getTextColor();
+        $linkColorByText = static::config()->get('link_colors_by_text');
+        if (isset($linkColorByText[$textColor])) {
+            return $linkColorByText[$textColor];
+        }
+
+        return $textColor;
+    }
+
+    /**
+     * getBackgroundImage - check if this section has a background image and
+     * return it
      *
      * @return Image|null
      */
-    public function getComputedBackgroundImage()
+    public function getBackgroundImage()
     {
-        if (
-            static::config()->get('allow_image_background') &&
-            $this->BackgroundColor === '_image' &&
-            $this->BGImageID != 0
-        ) {
+        if ($this->BackgroundType == 'image' && static::config()->get('allow_image_background')) {
             return $this->BGImage;
         }
         return null;
     }
 
+
+
+
+
+    //
+    // /**
+    //  * getBackgroundColor - returns the background Color
+    //  *
+    //  * @return string|null
+    //  */
+    // public function getComputedBackgroundColor()
+    // {
+    //     $availableColors = static::config()->get('background_colors');
+    //     if (
+    //         $this->BackgroundColor &&
+    //         isset($availableColors[$this->BackgroundColor]) &&
+    //         $this->BackgroundColor !== '_image' &&
+    //         $this->BackgroundColor !== 'default'
+    //     ) {
+    //         return $this->BackgroundColor;
+    //     }
+    //     return null;
+    // }
+    //
+    // /**
+    //  * getTextColor - returns the current text color
+    //  *
+    //  * @return string|null
+    //  */
+    // public function getComputedTextColor()
+    // {
+    //     $availableColors = static::config()->get('text_colors');
+    //     $bgToTextColor = static::config()->get('text_colors_by_background');
+    //     if (
+    //         $this->TextColor &&
+    //         isset($availableColors[$this->TextColor]) &&
+    //         $this->BackgroundColor === '_image'
+    //     ) {
+    //         return $this->TextColor;
+    //     } elseif (
+    //         $this->BackgroundColor &&
+    //         $this->BackgroundColor !== 'default' &&
+    //         $this->BackgroundColor !== '_image' &&
+    //         isset($bgToTextColor[$this->BackgroundColor])
+    //     ) {
+    //         return $bgToTextColor[$this->BackgroundColor];
+    //     }
+    //     return null;
+    // }
+    //
+    // /**
+    //  * getBackgroundImage - returns the durrent background image
+    //  *
+    //  * @return Image|null
+    //  */
+    // public function getComputedBackgroundImage()
+    // {
+    //     if (
+    //         static::config()->get('allow_image_background') &&
+    //         $this->BackgroundColor === '_image' &&
+    //         $this->BGImageID != 0
+    //     ) {
+    //         return $this->BGImage;
+    //     }
+    //     return null;
+    // }
+
+
+
+
+
+
+
+
     /**
+     * getRenderTemplates - returns the templates used to render this element
+     *
      * @param string $suffix
      *
      * @return array
