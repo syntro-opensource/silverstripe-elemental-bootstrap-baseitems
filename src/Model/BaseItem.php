@@ -4,9 +4,11 @@ namespace Syntro\SilverStripeElementalBaseitems\Model;
 
 use SilverStripe\Assets\Image;
 use SilverStripe\ORM\DataObject;
+use SilverStripe\Forms\FieldList;
 use SilverStripe\Versioned\Versioned;
 use SilverStripe\Security\Permission;
 use SilverStripe\Control\Director;
+use SilverStripe\CMS\Model\SiteTree;
 use gorriecoe\Link\Models\Link;
 use gorriecoe\LinkField\LinkField;
 use BucklesHusky\FontAwesomeIconPicker\Forms\FAPickerField;

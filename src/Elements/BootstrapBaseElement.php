@@ -304,7 +304,7 @@ class BootstrapSectionBaseElement extends BaseElement
     /**
      * getTranslatedOptionsFor - retrieve a config value prepped for a dropdown
      *
-     * @param  string $value the name of the config value
+     * @param  string $configOption the name of the config value
      * @return array
      */
     public function getTranslatedOptionsFor($configOption)
