@@ -230,6 +230,7 @@ class BootstrapSectionBaseElement extends BaseElement
                 ),
                 'ExtraClass'
             );
+            /** @phpstan-ignore-next-line */
             $bgColorField->hideIf('BackgroundType')->isEqualTo('image');
 
 
@@ -253,6 +254,7 @@ class BootstrapSectionBaseElement extends BaseElement
                         ->setIsMultiUpload(false),
                     'ExtraClass'
                 );
+                /** @phpstan-ignore-next-line */
                 $backgroundImage->hideUnless('BackgroundType')->isEqualTo('image');
 
                 $fields->addFieldToTab(
@@ -267,6 +269,7 @@ class BootstrapSectionBaseElement extends BaseElement
                     ),
                     'ExtraClass'
                 );
+                /** @phpstan-ignore-next-line */
                 $textColor->hideUnless('BackgroundType')->isEqualTo('image');
             }
         });
