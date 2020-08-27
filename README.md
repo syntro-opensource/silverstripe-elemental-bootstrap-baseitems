@@ -1,4 +1,4 @@
-# SilverStripe elemental bootstrap alertsection
+# SilverStripe elemental bootstrap base items
 
 [![Build Status](https://travis-ci.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems.svg?branch=master)](https://travis-ci.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems)
 [![phpstan](https://img.shields.io/badge/PHPStan-enabled-success)](https://github.com/phpstan/phpstan)
@@ -7,11 +7,12 @@
 
 
 This module provides DataObjects for sections in the
-[`syntro/silverstripe-elemental-bootstrap-collection`](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-collection) module.
+[`syntro/silverstripe-elemental-bootstrap-collection`](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-collection) module and other, standalone modules.
 
 It sets up a new base element, which is capable of handling color management
 for bootstrap blocks, establishes a templating namespace and uses a different
 controller template, suitable for full-width bootstrap based themes.
+
 
 
 ## Installation
