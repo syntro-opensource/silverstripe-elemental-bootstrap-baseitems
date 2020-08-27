@@ -79,3 +79,24 @@ YourSectionClass:
 ```
 
 This will then lead to a `text-light` class being rendered for `$TextColorClass`.
+
+## Link colors
+When composing section templates, you might need to have a specific color for link
+elements (like buttons). To achieve this, there are two config arrays:
+
+```yaml
+YourSectionClass:
+    link_colors_by_background:
+        dark: primary
+        primary: light
+    link_colors_by_text:
+        white: primary
+```
+
+This configuration is responsible for the `$LinkColor` variable in templates
+and first returns a matching item in the background list, then a matching item
+in the text list and finally falls back to the default text color
+
+> When using colors like `'white'` in the `text_colors` or `default_text_color`
+> array, you should at least supply `white: light`, as buttons normally do not
+> have a `white` variant.

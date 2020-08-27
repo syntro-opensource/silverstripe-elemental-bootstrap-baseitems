@@ -13,7 +13,10 @@ It sets up a new base element, which is capable of handling color management
 for bootstrap blocks, establishes a templating namespace and uses a different
 controller template, suitable for full-width bootstrap based themes.
 
+## Requirements
 
+* SilverStripe ^4.0
+* Silverstripe elemental ^4
 
 ## Installation
 
@@ -26,23 +29,9 @@ composer require syntro/silverstripe-elemental-bootstrap-baseitems
 See [License](license.md)
 
 ## Documentation
-> TODO
 
-<!-- ## Example configuration (optional)
-If your module makes use of the config API in SilverStripe it's a good idea to provide an example config
- here that will get the module working out of the box and expose the user to the possible configuration options.
-
-Provide a yaml code example where possible.
-
-```yaml
-
-Page:
-  config_option: true
-  another_config:
-    - item1
-    - item2
-
-``` -->
+* [Templating](docs/en/Templating.md)
+* [Templating](docs/en/Templating.md)
 
 ## Maintainers
  * Matthias Leutenegger <hello@syntro.ch>
