@@ -72,6 +72,14 @@ class BootstrapSectionBaseElement extends BaseElement
     private static $description = 'Bootstrap Section Base element class';
 
     /**
+     * if true, the background displays a default label.
+     *
+     * @config
+     * @var boolean
+     */
+    private static $add_default_background_color = true;
+
+    /**
      * The default background color. If set, there will always be a class
      * rendered
      *
@@ -263,7 +271,8 @@ class BootstrapSectionBaseElement extends BaseElement
                         __CLASS__ . '.BACKGROUNDCOLOR',
                         'Background color'
                     ),
-                    'background_colors'
+                    'background_colors',
+                    static::config()->get('add_default_background_color')
                 ),
                 'ExtraClass'
             );
@@ -305,9 +314,10 @@ class BootstrapSectionBaseElement extends BaseElement
      * getTranslatedOptionsFor - retrieve a config value prepped for a dropdown
      *
      * @param  string $configOption the name of the config value
+     * @param  string $addDefault   = true add a default label
      * @return array
      */
-    public function getTranslatedOptionsFor($configOption)
+    public function getTranslatedOptionsFor($configOption, $addDefault = true)
     {
         $values = static::config()->get($configOption);
         $selection = [];
@@ -317,10 +327,13 @@ class BootstrapSectionBaseElement extends BaseElement
                 $valueName
             );
         }
-        $selection['default'] = _t(
-            __CLASS__ . '.DEFAULT',
-            'Default'
-        );
+        if ($addDefault) {
+            $selection['default'] = _t(
+                __CLASS__ . '.DEFAULT',
+                'Default'
+            );
+        }
+
         return $selection;
     }
 
@@ -330,12 +343,13 @@ class BootstrapSectionBaseElement extends BaseElement
      *
      * @param  string $name                the name of the field
      * @param  string $title               the title of the field
+     * @param  string $addDefault          = true add a default label
      * @param  string $colorListFromConfig the config option containing the list
      * @return DropdownField|TextField
      */
-    public function createColorSelectField($name,$title,$colorListFromConfig)
+    public function createColorSelectField($name,$title,$colorListFromConfig, $addDefault = true)
     {
-        $options = $this->getTranslatedOptionsFor($colorListFromConfig);
+        $options = $this->getTranslatedOptionsFor($colorListFromConfig, $addDefault);
         if (count($options) > 1) {
             $bgColorField = DropdownField::create(
                 $name,

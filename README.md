@@ -30,7 +30,7 @@ See [License](license.md)
 
 ## Documentation
 
-* [Templating](docs/en/Templating.md)
+* [Configuration](docs/en/Configuration.md)
 * [Templating](docs/en/Templating.md)
 
 ## Maintainers

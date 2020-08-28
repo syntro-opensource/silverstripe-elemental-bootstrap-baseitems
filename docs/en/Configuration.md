@@ -22,7 +22,17 @@ YourSectionClass:
         grad-primary: A gradient using the primary blue color # This is a custom color. you have to define '.bg-grad-primary' yourself
 ```
 
-### Setting the default text color
+### Disabling the default color
+by default, a default label is displayed in the color dropdown. This is done, so
+an editor can always switch back to a default color. You can disable this
+behaviour by setting:
+
+```yaml
+YourSectionClass:
+    add_default_background_color: false
+```
+
+### Setting the default background color
 The label `default` is reserved for the default option. setting it as mentioned
 above will lead to it being overwritten. You can however set a default color name
 to be used for when the default label is selected (in order to account for sections
