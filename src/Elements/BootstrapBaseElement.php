@@ -313,7 +313,7 @@ class BootstrapSectionBaseElement extends BaseElement
         $selection = [];
         foreach ($values as $valueKey => $valueName) {
             $selection[$valueKey] = _t(
-                __CLASS__ . '.' . $valueKey,
+                static::class . '.' . $valueKey,
                 $valueName
             );
         }
