@@ -121,7 +121,7 @@ class BootstrapSectionBaseElement extends BaseElement
      * @var array
      */
     private static $text_colors = [
-        'white'
+        'white' => 'White'
     ];
 
     /**
@@ -142,7 +142,9 @@ class BootstrapSectionBaseElement extends BaseElement
      * @config
      * @var array
      */
-    private static $link_colors_by_text = [];
+    private static $link_colors_by_text = [
+        'white' => 'light'
+    ];
 
     /**
      * Color mapping from background to link color. This option can be used for
