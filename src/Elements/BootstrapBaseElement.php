@@ -196,11 +196,18 @@ class BootstrapSectionBaseElement extends BaseElement
     {
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
 
+            /**
+             * If this Block allows the Use of a background image,
+             * we add an optionset and the Image field
+             */
+            $fields->removeByName([
+                'BackgroundType',
+                'TextColorLabel',
+                'BGImage'
+            ]);
             $useImage = static::config()->get('allow_image_background');
-
-            // add a selection field for Color or image
-            $fields->removeByName('BackgroundType');
-            if ($useImage || count($this->getTranslatedOptionsFor('background_colors')) > 1) {
+            if ($useImage) {
+                // add a selection field for Color or image
                 $fields->addFieldToTab(
                     'Root.Settings',
                     OptionsetField::create(
@@ -213,6 +220,36 @@ class BootstrapSectionBaseElement extends BaseElement
                     ),
                     'ExtraClass'
                 );
+
+                // add an image field for Background
+                $fields->addFieldToTab(
+                    'Root.Settings',
+                    $backgroundImage = UploadField::create(
+                        'BGImage',
+                        _t(
+                            __CLASS__ . '.BACKGROUNDIMAGE',
+                            'Background Image'
+                        )
+                    )
+                        ->setFolderName('Uploads/Elements/Backgrounds')
+                        ->setIsMultiUpload(false),
+                    'ExtraClass'
+                );
+                $backgroundImage->hideIf('BackgroundType')->isEqualTo('color');
+
+                $fields->addFieldToTab(
+                    'Root.Settings',
+                    $textColor = $this->createColorSelectField(
+                        'TextColorLabel',
+                        _t(
+                            __CLASS__ . '.TEXTCOLOR',
+                            'Text color'
+                        ),
+                        'text_colors'
+                    ),
+                    'ExtraClass'
+                );
+                $textColor->hideIf('BackgroundType')->isEqualTo('color');
             }
 
 
@@ -232,43 +269,6 @@ class BootstrapSectionBaseElement extends BaseElement
             );
             $bgColorField->hideIf('BackgroundType')->isEqualTo('image');
 
-
-            // Add additional fields for setting an Image Background
-            $fields->removeByName([
-                'TextColorLabel',
-                'BGImage'
-            ]);
-            if ($useImage) {
-                // add an image field for Background
-                $fields->addFieldToTab(
-                    'Root.Settings',
-                    $backgroundImage = UploadField::create(
-                        'BGImage',
-                        _t(
-                            __CLASS__ . '.BACKGROUNDIMAGE',
-                            'Background Image'
-                        )
-                    )
-                        ->setFolderName('Uploads/Elements/Backgrounds')
-                        ->setIsMultiUpload(false),
-                    'ExtraClass'
-                );
-                $backgroundImage->hideUnless('BackgroundType')->isEqualTo('image');
-
-                $fields->addFieldToTab(
-                    'Root.Settings',
-                    $textColor = $this->createColorSelectField(
-                        'TextColorLabel',
-                        _t(
-                            __CLASS__ . '.TEXTCOLOR',
-                            'Text color'
-                        ),
-                        'text_colors'
-                    ),
-                    'ExtraClass'
-                );
-                $textColor->hideUnless('BackgroundType')->isEqualTo('image');
-            }
         });
 
 
