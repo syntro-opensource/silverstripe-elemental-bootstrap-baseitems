@@ -313,8 +313,8 @@ class BootstrapSectionBaseElement extends BaseElement
     /**
      * getTranslatedOptionsFor - retrieve a config value prepped for a dropdown
      *
-     * @param  string $configOption the name of the config value
-     * @param  string $addDefault   = true add a default label
+     * @param  string  $configOption the name of the config value
+     * @param  boolean $addDefault   = true add a default label
      * @return array
      */
     public function getTranslatedOptionsFor($configOption, $addDefault = true)
@@ -341,10 +341,10 @@ class BootstrapSectionBaseElement extends BaseElement
      * createColorSelectField - generates a field to be displayed in the cms
      * allowing the selection of values from a color list
      *
-     * @param  string $name                the name of the field
-     * @param  string $title               the title of the field
-     * @param  string $addDefault          = true add a default label
-     * @param  string $colorListFromConfig the config option containing the list
+     * @param  string  $name                the name of the field
+     * @param  string  $title               the title of the field
+     * @param  boolean $addDefault          = true add a default label
+     * @param  string  $colorListFromConfig the config option containing the list
      * @return DropdownField|TextField
      */
     public function createColorSelectField($name,$title,$colorListFromConfig, $addDefault = true)
