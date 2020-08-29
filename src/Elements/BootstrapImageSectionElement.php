@@ -75,10 +75,15 @@ class BootstrapImageSectionElement extends BootstrapSectionBaseElement
         return parent::getCMSFields();
     }
 
-    // public function getSummary()
-    // {
-    //     return '';
-    // }
+    public function getSummary()
+    {
+        /** @var Image|null $image */
+        $image = $this->Image();
+        if ($image && $image->exists() && $image->getIsImage()) {
+            return $image->Title;
+        }
+        return parent::getSummary();
+    }
 
     protected function provideBlockSchema()
     {
