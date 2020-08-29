@@ -80,7 +80,7 @@ class BootstrapImageSectionElement extends BootstrapSectionBaseElement
         /** @var Image|null $image */
         $image = $this->Image();
         if ($image && $image->exists() && $image->getIsImage()) {
-            return $image->Title;
+            return $image->Filename;
         }
         return parent::getSummary();
     }
