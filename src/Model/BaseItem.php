@@ -24,6 +24,15 @@ use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
  */
 class BaseItem extends DataObject
 {
+    /**
+     * @var string
+     */
+    private static $singular_name = 'Item';
+
+    /**
+     * @var string
+     */
+    private static $plural_name = 'Items';
 
     /**
      * @var array
