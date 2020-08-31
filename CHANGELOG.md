@@ -6,8 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.0] - 2020-07-22
+## [0.1.0] - 2020-08-31
 * Initial release
 
 [Unreleased]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/0.1.0..master
-[0.1.0]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/tree/1.0.0
+[0.1.0]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/tree/0.1.0
