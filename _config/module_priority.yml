@@ -1,0 +1,8 @@
+---
+Name: modules-silverstripe-elemental-bootstrap-baseitems
+Before:
+  - 'dnadesign/silverstripe-elemental'
+---
+SilverStripe\Core\Manifest\ModuleManifest:
+  module_priority:
+    - syntro/silverstripe-elemental-bootstrap-baseitems

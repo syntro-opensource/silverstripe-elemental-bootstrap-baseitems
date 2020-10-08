@@ -1,6 +1,8 @@
 ---
 name: bootstrap-elemental-baseconfig
 ---
-SilverStripe\Core\Injector\Injector:
-  DNADesign\Elemental\Extensions\ElementalPageExtension:
-    class: Syntro\SilverStripeElementalBaseitems\Extensions\BootstrapElementalPageExtension
+DNADesign\Elemental\Models\BaseElement:
+  controller_template: SectionHolder
+  inline_editable: false
+  extensions:
+    - Syntro\SilverStripeElementalBaseitems\Extensions\BootstrapBaseElementExtension

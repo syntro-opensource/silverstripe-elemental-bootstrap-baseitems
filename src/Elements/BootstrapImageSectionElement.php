@@ -7,13 +7,13 @@ use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 use SilverStripe\ORM\FieldType\DBField;
-use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
-
+// use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
+use DNADesign\Elemental\Models\BaseElement;
 
 /**
  * Basic content element using Bootstrap markup
  */
-class BootstrapImageSectionElement extends BootstrapSectionBaseElement
+class BootstrapImageSectionElement extends BaseElement
 {
     /**
      * This defines the block name in the CSS
