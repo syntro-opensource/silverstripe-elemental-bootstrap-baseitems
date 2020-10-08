@@ -6,6 +6,7 @@
 [![composer](https://img.shields.io/packagist/dt/syntro/silverstripe-elemental-bootstrap-baseitems?color=success&logo=composer)](https://packagist.org/packages/syntro/silverstripe-elemental-bootstrap-baseitems)
 
 
+
 This module provides DataObjects for sections in the
 [`syntro/silverstripe-elemental-bootstrap-collection`](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-collection) module and other, standalone modules.
 
