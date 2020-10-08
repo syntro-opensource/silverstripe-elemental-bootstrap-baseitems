@@ -14,6 +14,15 @@ use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
  */
 class BootstrapElementController extends ElementController
 {
+
+    /**
+     * Location of Templates
+     *
+     * @config
+     * @var string
+     */
+    private static $template_root = 'Syntro\\BootstrapElemental\\';
+
     /**
      * Renders the managed {@link BaseElement} wrapped with the current
      * {@link ElementController}.
@@ -30,7 +39,7 @@ class BootstrapElementController extends ElementController
         }
 
         $template = $this->element->config()->get('controller_template');
-        $templateRoot = $this->element->config()->get('template_root');
+        $templateRoot = static::config()->get('template_root');
 
         return $this->renderWith([
             'type' => 'Layout',

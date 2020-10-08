@@ -1,6 +1,6 @@
 <?php
 
-namespace Syntro\SilverStripeElementalBaseitems\Elements;
+namespace Syntro\SilverStripeElementalBaseitems\Extensions;
 
 use SilverStripe\Forms\ReadonlyField;
 use SilverStripe\Forms\OptionsetField;
@@ -8,17 +8,19 @@ use SilverStripe\Forms\TextField;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Assets\Image;
+use SilverStripe\ORM\DataExtension;
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\FieldList;
 use Syntro\SilverStripeElementalBaseitems\Control\BootstrapElementController;
 
+
 /**
- * This Element abstracts the DNADesign baseelement to apply several additional
+ * This Extension abstracts the DNADesign baseelement to apply several additional
  * options useful for bootstrap sections
  *
  * @author Matthias Leutenegger <hello@syntro.ch>
  */
-class BootstrapSectionBaseElement extends BaseElement
+class BootstrapBaseElementExtension extends DataExtension
 {
 
     /**
@@ -29,23 +31,25 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     private static $block_name = 'section';
 
-    /**
-     * @var string
-     */
-    private static $controller_class = BootstrapElementController::class;
+    // /**
+    //  * @var string
+    //  */
+    // private static $controller_class = BootstrapElementController::class;
 
-    /**
-     * @var string
-     */
-    private static $controller_template = 'ElementHolder';
+    // /**
+    //  * @config
+    //  * @var string
+    //  */
+    // private static $controller_template = 'ElementHolder';
 
 
-    /**
-     * Location of Templates
-     *
-     * @var string
-     */
-    private static $template_root = 'Syntro\\BootstrapElemental\\';
+    // /**
+    //  * Location of Templates
+    //  *
+    //  * @config
+    //  * @var string
+    //  */
+    // private static $template_root = 'Syntro\\BootstrapElemental\\';
 
     /**
      * Set to false to prevent an in-line edit form from showing in an elemental area. Instead the element will be
@@ -202,89 +206,86 @@ class BootstrapSectionBaseElement extends BaseElement
      *
      * @return FieldList
      */
-    public function getCMSFields()
+    public function updateCMSFields($fields)
     {
-        $this->beforeUpdateCMSFields(function (FieldList $fields) {
-
-            /**
-             * If this Block allows the Use of a background image,
-             * we add an optionset and the Image field
-             */
-            $fields->removeByName([
-                'BackgroundType',
-                'TextColorLabel',
-                'BGImage'
-            ]);
-            $useImage = static::config()->get('allow_image_background');
-            if ($useImage) {
-                // add a selection field for Color or image
-                $fields->addFieldToTab(
-                    'Root.Settings',
-                    OptionsetField::create(
-                        'BackgroundType',
-                        _t(
-                            __CLASS__ . '.BACKGROUNDTYPE',
-                            'Background Type'
-                        ),
-                        $this->getBackgroundOptions()
-                    ),
-                    'ExtraClass'
-                );
-
-                // add an image field for Background
-                $fields->addFieldToTab(
-                    'Root.Settings',
-                    $backgroundImage = UploadField::create(
-                        'BGImage',
-                        _t(
-                            __CLASS__ . '.BACKGROUNDIMAGE',
-                            'Background Image'
-                        )
-                    )
-                        ->setFolderName('Uploads/Elements/Backgrounds')
-                        ->setIsMultiUpload(false),
-                    'ExtraClass'
-                );
-                $backgroundImage->hideIf('BackgroundType')->isEqualTo('color');
-
-                $fields->addFieldToTab(
-                    'Root.Settings',
-                    $textColor = $this->createColorSelectField(
-                        'TextColorLabel',
-                        _t(
-                            __CLASS__ . '.TEXTCOLOR',
-                            'Text color'
-                        ),
-                        'text_colors'
-                    ),
-                    'ExtraClass'
-                );
-                $textColor->hideIf('BackgroundType')->isEqualTo('color');
-            }
-
-
-            // add a dropdown with available colors
-            $fields->removeByName('BackgroundColorLabel');
+        $owner = $this->getOwner();
+        /**
+         * If this Block allows the Use of a background image,
+         * we add an optionset and the Image field
+         */
+        $fields->removeByName([
+            'BackgroundType',
+            'TextColorLabel',
+            'BGImage'
+        ]);
+        $useImage = $owner->config()->get('allow_image_background');
+        if ($useImage) {
+            // add a selection field for Color or image
             $fields->addFieldToTab(
                 'Root.Settings',
-                $bgColorField = $this->createColorSelectField(
-                    'BackgroundColorLabel',
+                OptionsetField::create(
+                    'BackgroundType',
                     _t(
-                        __CLASS__ . '.BACKGROUNDCOLOR',
-                        'Background color'
+                        __CLASS__ . '.BACKGROUNDTYPE',
+                        'Background Type'
                     ),
-                    'background_colors',
-                    static::config()->get('add_default_background_color')
+                    $this->getBackgroundOptions()
                 ),
                 'ExtraClass'
             );
-            $bgColorField->hideIf('BackgroundType')->isEqualTo('image');
 
-        });
+            // add an image field for Background
+            $fields->addFieldToTab(
+                'Root.Settings',
+                $backgroundImage = UploadField::create(
+                    'BGImage',
+                    _t(
+                        __CLASS__ . '.BACKGROUNDIMAGE',
+                        'Background Image'
+                    )
+                )
+                    ->setFolderName('Uploads/Elements/Backgrounds')
+                    ->setIsMultiUpload(false),
+                'ExtraClass'
+            );
+            $backgroundImage->hideIf('BackgroundType')->isEqualTo('color');
+
+            $fields->addFieldToTab(
+                'Root.Settings',
+                $textColor = $owner->createColorSelectField(
+                    'TextColorLabel',
+                    _t(
+                        __CLASS__ . '.TEXTCOLOR',
+                        'Text color'
+                    ),
+                    'text_colors'
+                ),
+                'ExtraClass'
+            );
+            $textColor->hideIf('BackgroundType')->isEqualTo('color');
+        }
+
+
+        // add a dropdown with available colors
+        $fields->removeByName('BackgroundColorLabel');
+        $fields->addFieldToTab(
+            'Root.Settings',
+            $bgColorField = $owner->createColorSelectField(
+                'BackgroundColorLabel',
+                _t(
+                    __CLASS__ . '.BACKGROUNDCOLOR',
+                    'Background color'
+                ),
+                'background_colors',
+                $owner->config()->get('add_default_background_color')
+            ),
+            'ExtraClass'
+        );
+        $bgColorField->hideIf('BackgroundType')->isEqualTo('image');
 
 
 
-        return parent::getCMSFields();
+        return $fields;
     }
 
 
@@ -295,7 +296,8 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getBackgroundOptions()
     {
-        $useImage = static::config()->get('allow_image_background');
+        $owner = $this->getOwner();
+        $useImage = $owner->config()->get('allow_image_background');
         $options = [
             'color' => _t(
                 __CLASS__ . '.COLOR',
@@ -321,7 +323,8 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getTranslatedOptionsFor($configOption, $addDefault = true)
     {
-        $values = static::config()->get($configOption);
+        $owner = $this->getOwner();
+        $values = $owner->config()->get($configOption);
         $selection = [];
         foreach ($values as $valueKey => $valueName) {
             $selection[$valueKey] = _t(
@@ -351,7 +354,8 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function createColorSelectField($name,$title,$colorListFromConfig, $addDefault = true)
     {
-        $options = $this->getTranslatedOptionsFor($colorListFromConfig, $addDefault);
+        $owner = $this->getOwner();
+        $options = $owner->getTranslatedOptionsFor($colorListFromConfig, $addDefault);
         if (count($options) > 1) {
             $bgColorField = DropdownField::create(
                 $name,
@@ -379,15 +383,16 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getBackgroundColor()
     {
-        $default = static::config()->get('default_background_color');
+        $owner = $this->getOwner();
+        $default = $owner->config()->get('default_background_color');
         $default = $default ? $default : null;
-        $bgColors = static::config()->get('background_colors');
-        if ($this->BackgroundType == 'image' && static::config()->get('allow_image_background')) {
+        $bgColors = $owner->config()->get('background_colors');
+        if ($owner->BackgroundType == 'image' && $owner->config()->get('allow_image_background')) {
             return null;
-        } elseif ($this->BackgroundColorLabel == 'default') {
+        } elseif ($owner->BackgroundColorLabel == 'default') {
             return $default;
         }
-        return isset($bgColors[$this->BackgroundColorLabel]) ? $this->BackgroundColorLabel : $default;
+        return isset($bgColors[$owner->BackgroundColorLabel]) ? $owner->BackgroundColorLabel : $default;
     }
 
     /**
@@ -397,16 +402,17 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getTextColor()
     {
-        $default = static::config()->get('default_text_color');
+        $owner = $this->getOwner();
+        $default = $owner->config()->get('default_text_color');
         $default = $default ? $default : null;
-        $textColors = static::config()->get('text_colors');
-        if ($this->BackgroundType == 'image' && static::config()->get('allow_image_background')) {
-            return isset($textColors[$this->TextColorLabel]) ? $this->TextColorLabel : $default;;
+        $textColors = $owner->config()->get('text_colors');
+        if ($owner->BackgroundType == 'image' && $owner->config()->get('allow_image_background')) {
+            return isset($textColors[$owner->TextColorLabel]) ? $owner->TextColorLabel : $default;
         }
 
-        $colorsByBackground = static::config()->get('text_colors_by_background');
+        $colorsByBackground = $owner->config()->get('text_colors_by_background');
 
-        return isset($colorsByBackground[$this->BackgroundColorLabel]) ? $colorsByBackground[$this->BackgroundColorLabel] : $default;
+        return isset($colorsByBackground[$owner->BackgroundColorLabel]) ? $colorsByBackground[$owner->BackgroundColorLabel] : $default;
     }
 
     /**
@@ -416,7 +422,8 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getBackgroundColorClass()
     {
-        $bgColor = $this->getBackgroundColor();
+        $owner = $this->getOwner();
+        $bgColor = $owner->getBackgroundColor();
         if ($bgColor) {
             return sprintf('bg-%s',$bgColor);
         }
@@ -430,7 +437,8 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getTextColorClass()
     {
-        $textColor = $this->getTextColor();
+        $owner = $this->getOwner();
+        $textColor = $owner->getTextColor();
         if ($textColor) {
             return sprintf('text-%s',$textColor);
         }
@@ -450,12 +458,13 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getLinkColor()
     {
-        $linkColorByBackground = static::config()->get('link_colors_by_background');
+        $owner = $this->getOwner();
+        $linkColorByBackground = $owner->config()->get('link_colors_by_background');
         if (isset($linkColorByBackground[$this->getBackgroundColor()])) {
             return $linkColorByBackground[$this->getBackgroundColor()];
         }
-        $textColor = $this->getTextColor();
-        $linkColorByText = static::config()->get('link_colors_by_text');
+        $textColor = $owner->getTextColor();
+        $linkColorByText = $owner->config()->get('link_colors_by_text');
         if (isset($linkColorByText[$textColor])) {
             return $linkColorByText[$textColor];
         }
@@ -471,8 +480,9 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getBackgroundImage()
     {
-        if ($this->BackgroundType == 'image' && static::config()->get('allow_image_background')) {
-            return $this->BGImage;
+        $owner = $this->getOwner();
+        if ($owner->BackgroundType == 'image' && $owner->config()->get('allow_image_background')) {
+            return $owner->BGImage;
         }
         return null;
     }
@@ -558,18 +568,18 @@ class BootstrapSectionBaseElement extends BaseElement
      *
      * @return array
      */
-    public function getRenderTemplates($suffix = '')
-    {
-        $templates =  parent::getRenderTemplates($suffix);
-        $templateRoot = static::config()->get('template_root');
-        $relocatedTemplates = [];
-        foreach ($templates as $key => $value) {
-            $namespace = explode('\\',$value);
-            $relocatedTemplates[] = $templateRoot . array_pop($namespace);
-        }
-        $relocatedTemplates['type'] = 'Blocks';
-        return $relocatedTemplates;
-    }
+    // public function getRenderTemplates($suffix = '')
+    // {
+    //     $templates =  parent::getRenderTemplates($suffix);
+    //     $templateRoot = static::config()->get('template_root');
+    //     $relocatedTemplates = [];
+    //     foreach ($templates as $key => $value) {
+    //         $namespace = explode('\\',$value);
+    //         $relocatedTemplates[] = $templateRoot . array_pop($namespace);
+    //     }
+    //     $relocatedTemplates['type'] = 'Blocks';
+    //     return $relocatedTemplates;
+    // }
 
     /**
      * getSubTemplate - returns the template location for a given sub-template
@@ -577,13 +587,13 @@ class BootstrapSectionBaseElement extends BaseElement
      * @param  string $itemName the items Name
      * @return string
      */
-    public function getSubTemplate($itemName = '')
-    {
-        $templateRoot = static::config()->get('template_root');
-        $ElementName = explode('\\', static::class);
-        $ElementName = array_pop($ElementName);
-        return $templateRoot . 'Blocks\\' . $ElementName . '\\' . $itemName;
-    }
+    // public function getSubTemplate($itemName = '')
+    // {
+    //     $templateRoot = static::config()->get('template_root');
+    //     $ElementName = explode('\\', static::class);
+    //     $ElementName = array_pop($ElementName);
+    //     return $templateRoot . 'Blocks\\' . $ElementName . '\\' . $itemName;
+    // }
 
 
     /**
@@ -593,7 +603,8 @@ class BootstrapSectionBaseElement extends BaseElement
      */
     public function getElementName()
     {
-        return static::config()->get('block_name');
+        $owner = $this->getOwner();
+        return $owner->config()->get('block_name');
     }
 
 }

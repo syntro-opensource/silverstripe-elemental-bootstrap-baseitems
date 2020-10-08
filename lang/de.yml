@@ -1,5 +1,5 @@
 de:
-  Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement:
+  Syntro\SilverStripeElementalBaseitems\Extensions\BootstrapBaseElementExtension:
     BACKGROUNDTYPE: Hintergrund Typ
     COLOR: Farbe
     IMAGE: Bild
