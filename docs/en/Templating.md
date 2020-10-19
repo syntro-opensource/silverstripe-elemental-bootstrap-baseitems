@@ -53,4 +53,4 @@ ones provided by elemental):
 * `$BackgroundColor`
 * `$BackgroundColorClass`
 * `$LinkColor`
-* `$BackgroundImage`
+* `$BGImage`
