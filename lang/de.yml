@@ -7,3 +7,6 @@ de:
     BACKGROUNDIMAGE: Hintergrundbild
     TEXTCOLOR: Textfarbe
     DEFAULT: Standard
+  Syntro\SilverStripeElementalBaseitems\Elements\BootstrapImageSectionElement:
+    IMAGE: Bild
+    Caption: Beschriftung

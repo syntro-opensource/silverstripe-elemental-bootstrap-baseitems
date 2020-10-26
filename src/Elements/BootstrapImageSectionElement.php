@@ -4,6 +4,7 @@ namespace Syntro\SilverStripeElementalBaseitems\Elements;
 use SilverStripe\AssetAdmin\Forms\UploadField;
 use SilverStripe\Assets\Image;
 use SilverStripe\Forms\FieldList;
+use SilverStripe\Forms\TextareaField;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\HTMLEditor\TinyMCEConfig;
 use SilverStripe\ORM\FieldType\DBField;
@@ -11,7 +12,7 @@ use SilverStripe\ORM\FieldType\DBField;
 use DNADesign\Elemental\Models\BaseElement;
 
 /**
- * Basic content element using Bootstrap markup
+ * Basic image element using Bootstrap markup
  */
 class BootstrapImageSectionElement extends BaseElement
 {
@@ -25,7 +26,9 @@ class BootstrapImageSectionElement extends BaseElement
 
     private static $icon = 'font-icon-block-file';
 
-    private static $db = [];
+    private static $db = [
+        'Caption' => 'Text'
+    ];
 
     private static $has_one = [
         'Image' => Image::class,
@@ -61,26 +64,53 @@ class BootstrapImageSectionElement extends BaseElement
     public function getCMSFields()
     {
         $this->beforeUpdateCMSFields(function (FieldList $fields) {
-            $fields->addFieldToTab(
+            $fields->addFieldsToTab(
                 'Root.Main',
-                $uploadfield = UploadField::create(
-                    'Image',
-                    'Image'
-                )
+                [
+                    $uploadfield = UploadField::create(
+                        'Image',
+                        $this->fieldLabel('Image')
+                    ),
+                    $captionField = TextareaField::create(
+                        'Caption',
+                        $this->fieldLabel('Caption')
+                    )
+                ]
             );
             $uploadfield->setAllowedMaxFileNumber(1);
             $uploadfield->setFolderName('Uploads/ImageSections');
+
+
         });
 
         return parent::getCMSFields();
     }
 
+    /**
+     * fieldLabels - apply labels
+     *
+     * @param  boolean $includerelations = true
+     * @return array
+     */
+    public function fieldLabels($includerelations = true)
+    {
+        $labels = parent::fieldLabels($includerelations);
+        $labels['Image'] = _t(__CLASS__ . '.IMAGE', 'Image');
+        $labels['Caption'] = _t(__CLASS__ . '.CAPTION', 'Caption');
+        return $labels;
+    }
+
+    /**
+     * getSummary - returns a summary of this block
+     *
+     * @return {type}  description
+     */
     public function getSummary()
     {
         /** @var Image|null $image */
         $image = $this->Image();
         if ($image && $image->exists() && $image->getIsImage()) {
-            return $image->Filename;
+            return $this->Caption ? $this->Caption : $image->Filename;
         }
         return parent::getSummary();
     }
@@ -103,3 +133,5 @@ class BootstrapImageSectionElement extends BaseElement
         return _t(__CLASS__ . '.BlockType', 'Image');
     }
 }
+
+?>
