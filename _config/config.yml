@@ -6,3 +6,6 @@ DNADesign\Elemental\Models\BaseElement:
   inline_editable: false
   extensions:
     - Syntro\SilverStripeElementalBaseitems\Extensions\BootstrapBaseElementExtension
+
+DNADesign\Elemental\Models\ElementContent:
+  block_name: content-section
