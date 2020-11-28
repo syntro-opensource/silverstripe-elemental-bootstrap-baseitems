@@ -33,6 +33,12 @@
             "Syntro\\SilverStripeElementalBaseitems\\Tests\\": "tests/"
         }
     },
+    "config": {
+        "process-timeout": 600,
+        "platform": {
+            "ext-intl": "1.0.0"
+        }
+    },
     "minimum-stability": "dev",
     "prefer-stable": true
 }
