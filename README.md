@@ -1,6 +1,6 @@
 # SilverStripe elemental bootstrap base items
 
-[![Build Status](https://travis-ci.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems.svg?branch=master)](https://travis-ci.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems)
+![🎭 Tests](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/workflows/%F0%9F%8E%AD%20Tests/badge.svg)
 [![phpstan](https://img.shields.io/badge/PHPStan-enabled-success)](https://github.com/phpstan/phpstan)
 [![codecov](https://codecov.io/gh/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/branch/master/graph/badge.svg)](https://codecov.io/gh/syntro-opensource/silverstripe-elemental-bootstrap-baseitems)
 [![composer](https://img.shields.io/packagist/dt/syntro/silverstripe-elemental-bootstrap-baseitems?color=success&logo=composer)](https://packagist.org/packages/syntro/silverstripe-elemental-bootstrap-baseitems)
@@ -8,11 +8,12 @@
 
 
 This module provides DataObjects for sections in the
-[`syntro/silverstripe-elemental-bootstrap-collection`](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-collection) module and other, standalone modules.
+[`syntro/recipe-elemental-bootstrap`](https://github.com/syntro-opensource/recipe-elemental-bootstrap) recipe and other, standalone modules.
 
-It sets up a new base element, which is capable of handling color management
-for bootstrap blocks, establishes a templating namespace and uses a different
-controller template, suitable for full-width bootstrap based themes.
+It adds an extension to the base element, which anables handling color management
+for bootstrap blocks and uses a different controller template, suitable for
+full-width bootstrap based themes. An additional data object is provided as a
+base sub-element of a section, handling permissions and publishing.
 
 ## Requirements
 

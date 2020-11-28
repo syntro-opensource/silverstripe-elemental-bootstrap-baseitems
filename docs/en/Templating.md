@@ -1,23 +1,23 @@
 # Templating
 
-These Items are built to be dropped into any full width bootstrap design and
-use only bootstrap classes for styling. This helps with achieving a custom
-feel without having to redesign every element. You are however completely free
-to implement your own templates.
+Bootstrap is a widely used css framework, providing many components and a grid
+enabling one page to be used across multiple screen sizes. In the default
+form, these blocks embrace the section-structure by rendering every block
+as a section on the frontend. This means, they expect to be placed as a
+full-width component.
 
+If you have special needs, for example a a layout with a sidebar, you will have
+to adapt the holder and possibly the element template
 
-## Template location
-If you want to change how an element renders or create your own extension of
-`BootstrapBaseElement`, you can simply create a new template or overwrite
-a default template by creating one under
+## Change Holder Template
+you can provide a custom holder by placing this file in your project:
 ```
-templates/Syntro/BootstrapElemental/Blocks/ClassName.ss
+templates/DNADesign/Elemental/Layout/SectionHolder.ss
 ```
+You will have to handle background yourself, have a look at the
+[default `SectionHolder.ss`](https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/blob/master/templates/DNADesign/Elemental/Layout/SectionHolder.ss)
+template to get a feel for how you can do this.
 
-If you instead want to overwrite the section part, create a template under
-```
-templates/Syntro/BootstrapElemental/Layout/ElementHolder.ss
-```
 
 ## Use a custom holder
 If you need to use a custom holder template, you can specify this by creating
@@ -29,6 +29,11 @@ and configuring your element like so (or in your child class):
 Your\Element\Class:
     controller_template: MyElementHolder
 ```
+
+## Change the look of a block
+You can easily overwrite templates for blocks by generating template files in your
+theme/project corresponding to their namespace. Have a look at the `templates/`
+directory of the module providing the block in question.
 
 
 ## Use styles
