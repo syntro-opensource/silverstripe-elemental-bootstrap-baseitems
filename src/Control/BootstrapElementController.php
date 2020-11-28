@@ -1,10 +1,10 @@
 <?php
+
 namespace Syntro\SilverStripeElementalBaseitems\Control;
 
 use SilverStripe\View\Requirements;
 use DNADesign\Elemental\Controllers\ElementController;
 use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
-
 
 /**
  * Intermediate element controller to handle Templating to make it more
@@ -43,7 +43,7 @@ class BootstrapElementController extends ElementController
 
         return $this->renderWith([
             'type' => 'Layout',
-            $templateRoot.$template
+            $templateRoot . $template
         ]);
     }
 }

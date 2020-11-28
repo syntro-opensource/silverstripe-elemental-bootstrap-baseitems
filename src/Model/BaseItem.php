@@ -15,7 +15,6 @@ use BucklesHusky\FontAwesomeIconPicker\Forms\FAPickerField;
 use DNADesign\Elemental\Forms\TextCheckboxGroupField;
 use Syntro\SilverStripeElementalBaseitems\Elements\BootstrapSectionBaseElement;
 
-
 /**
  * Base Item handling permissions related to the elements and streamlining
  * templating
@@ -86,7 +85,6 @@ class BaseItem extends DataObject
                 TextCheckboxGroupField::create()
                     ->setName($this->fieldLabel('Title'))
             );
-
         });
         return parent::getCMSFields();
     }
@@ -105,7 +103,7 @@ class BaseItem extends DataObject
     /**
      * Basic permissions, defaults to page perms where possible.
      *
-     * @param \SilverStripe\Security\Member|null $member
+     * @param \SilverStripe\Security\Member|null $member current member
      * @return boolean
      */
     public function canView($member = null)
@@ -125,7 +123,7 @@ class BaseItem extends DataObject
     /**
      * Basic permissions, defaults to page perms where possible.
      *
-     * @param \SilverStripe\Security\Member|null $member
+     * @param \SilverStripe\Security\Member|null $member current member
      *
      * @return boolean
      */
@@ -150,7 +148,7 @@ class BaseItem extends DataObject
      * element is not published, then it can be deleted by someone who doesn't
      * have publishing permissions.
      *
-     * @param \SilverStripe\Security\Member|null $member
+     * @param \SilverStripe\Security\Member|null $member current member
      *
      * @return boolean
      */
@@ -171,8 +169,8 @@ class BaseItem extends DataObject
     /**
      * Basic permissions, defaults to page perms where possible.
      *
-     * @param \SilverStripe\Security\Member|null $member
-     * @param array $context
+     * @param \SilverStripe\Security\Member|null $member  current member
+     * @param array                              $context additional context
      *
      * @return boolean
      */
@@ -226,5 +224,4 @@ class BaseItem extends DataObject
     //     }
     //     return $templates;
     // }
-
 }

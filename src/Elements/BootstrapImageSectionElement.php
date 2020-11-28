@@ -1,4 +1,5 @@
 <?php
+
 namespace Syntro\SilverStripeElementalBaseitems\Elements;
 
 use SilverStripe\AssetAdmin\Forms\UploadField;
@@ -13,6 +14,8 @@ use DNADesign\Elemental\Models\BaseElement;
 
 /**
  * Basic image element using Bootstrap markup
+ *
+ * @author Matthias Leutenegger <hello@syntro.ch>
  */
 class BootstrapImageSectionElement extends BaseElement
 {
@@ -59,7 +62,9 @@ class BootstrapImageSectionElement extends BaseElement
     /**
      * Re-title the HTML field to Image
      *
-     * {@inheritDoc}
+     * @inheritDoc
+     *
+     * @return FieldList
      */
     public function getCMSFields()
     {
@@ -79,8 +84,6 @@ class BootstrapImageSectionElement extends BaseElement
             );
             $uploadfield->setAllowedMaxFileNumber(1);
             $uploadfield->setFolderName('Uploads/ImageSections');
-
-
         });
 
         return parent::getCMSFields();
@@ -103,7 +106,7 @@ class BootstrapImageSectionElement extends BaseElement
     /**
      * getSummary - returns a summary of this block
      *
-     * @return {type}  description
+     * @return string
      */
     public function getSummary()
     {
@@ -115,6 +118,11 @@ class BootstrapImageSectionElement extends BaseElement
         return parent::getSummary();
     }
 
+    /**
+     * provideBlockSchema
+     *
+     * @return array
+     */
     protected function provideBlockSchema()
     {
         $blockSchema = parent::provideBlockSchema();
@@ -128,10 +136,13 @@ class BootstrapImageSectionElement extends BaseElement
         return $blockSchema;
     }
 
+    /**
+     * getType
+     *
+     * @return string
+     */
     public function getType()
     {
         return _t(__CLASS__ . '.BlockType', 'Image');
     }
 }
-
-?>

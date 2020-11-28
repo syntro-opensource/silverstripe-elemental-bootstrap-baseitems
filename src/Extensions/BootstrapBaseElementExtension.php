@@ -13,7 +13,6 @@ use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\FieldList;
 use Syntro\SilverStripeElementalBaseitems\Control\BootstrapElementController;
 
-
 /**
  * This Extension abstracts the DNADesign baseelement to apply several additional
  * options useful for bootstrap sections
@@ -204,6 +203,7 @@ class BootstrapBaseElementExtension extends DataExtension
     /**
      * getCMSFields
      *
+     * @param FieldList $fields the original fields
      * @return FieldList
      */
     public function updateCMSFields($fields)
@@ -311,7 +311,6 @@ class BootstrapBaseElementExtension extends DataExtension
             );
         }
         return $options;
-
     }
 
     /**
@@ -348,11 +347,11 @@ class BootstrapBaseElementExtension extends DataExtension
      *
      * @param  string  $name                the name of the field
      * @param  string  $title               the title of the field
-     * @param  boolean $addDefault          = true add a default label
      * @param  string  $colorListFromConfig the config option containing the list
+     * @param  boolean $addDefault          = true add a default label
      * @return DropdownField|TextField
      */
-    public function createColorSelectField($name,$title,$colorListFromConfig, $addDefault = true)
+    public function createColorSelectField($name, $title, $colorListFromConfig, $addDefault = true)
     {
         $owner = $this->getOwner();
         $options = $owner->getTranslatedOptionsFor($colorListFromConfig, $addDefault);
@@ -425,7 +424,7 @@ class BootstrapBaseElementExtension extends DataExtension
         $owner = $this->getOwner();
         $bgColor = $owner->getBackgroundColor();
         if ($bgColor) {
-            return sprintf('bg-%s',$bgColor);
+            return sprintf('bg-%s', $bgColor);
         }
         return '';
     }
@@ -440,7 +439,7 @@ class BootstrapBaseElementExtension extends DataExtension
         $owner = $this->getOwner();
         $textColor = $owner->getTextColor();
         if ($textColor) {
-            return sprintf('text-%s',$textColor);
+            return sprintf('text-%s', $textColor);
         }
         return '';
     }
@@ -497,5 +496,4 @@ class BootstrapBaseElementExtension extends DataExtension
         $owner = $this->getOwner();
         return $owner->config()->get('block_name');
     }
-
 }

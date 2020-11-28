@@ -11,6 +11,7 @@ env:
   PDO: 1
   SS_ENVIRONMENT_TYPE: "dev"
   RECIPE_CMS_VERSION: 4.x-dev
+  GRAPHQL_VERSION: '^3'
 jobs:
   # phpunit:
   #   name: 🧩 PHPUnit
@@ -77,7 +78,7 @@ jobs:
         uses: actions/checkout@v2
       - name: install dependencies
         run: |
-          composer require --no-update silverstripe/recipe-cms:$RECIPE_CMS_VERSION &&\
+          composer require --no-update silverstripe/graphql:$GRAPHQL_VERSION silverstripe/recipe-cms:$RECIPE_CMS_VERSION &&\
           composer install --prefer-dist --no-interaction --no-progress --no-suggest --optimize-autoloader --verbose --profile
       - name: run phpstan
         run: vendor/bin/phpstan analyse src/ -c "phpstan.neon" -a vendor/symbiote/silverstripe-phpstan/bootstrap.php --level 4
