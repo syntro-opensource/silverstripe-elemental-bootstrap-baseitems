@@ -2,15 +2,23 @@
 ## [Unreleased]
 
 
-<a name="0.4.0"></a>
-## [0.4.0] - 2020-11-28
+<a name="1.4.0"></a>
+## [1.4.0] - 2020-11-28
 ### 🍰 Added
 - automatic release script using npm script
 - tests
 - make default content block available
 
+### 🐞 Fixed
+- lint & phpstan
+- test workflow acually works
+
 ### 🔧 Changed
+- extend composer config with platform spec
 - lower default spacing between sections
+
+### 🗑 Removed
+- travis check
 
 
 <a name="0.3.1"></a>
@@ -55,8 +63,8 @@
 <a name="0.1.0"></a>
 ## 0.1.0 - 2020-08-31
 
-[Unreleased]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/0.4.0...HEAD
-[0.4.0]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/0.3.1...0.4.0
+[Unreleased]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/0.3.1...1.4.0
 [0.3.1]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/0.3.0...0.3.1
 [0.3.0]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/0.2.1...0.3.0
 [0.2.1]: https://github.com/syntro-opensource/silverstripe-elemental-bootstrap-baseitems/compare/0.2.0...0.2.1
